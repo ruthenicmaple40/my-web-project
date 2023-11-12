@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>로또번호생성기</title>
+        <style>
+            body {
+                margin: 0px;
+                font-family: "Noto Sans KR", "Nanum Gothic", 'Lato', Helvetica, sans-serif;
+            }
+            .menu {
+                background-color: #333;
+                color: #fff;
+                padding: 20px;
+                display: flex;
+                justify-content: space-between;
+                min-width: 300px;
+                line-height: 0;
+            }
+            .menu ul {
+                list-style: none;
+                display: flex;
+                margin: 0 auto;
+                padding: 0;
+            }
+            .menu ul li {
+                padding: 0 10px;
+                text-align: center;
+                display: inline-block;
+                margin: 0 20px;
+            }
+            .menu ul li a {
+                text-decoration: none;
+                transition: color 0.3s;
+                text-align: center;
+                font-size: 0.94em;
+                color: #fff;
+            }
+            .menu ul li a:hover {
+                color: #79ff4a;
+            }
+            .content {
+                justify-content: center;
+                text-align: center;
+                margin-top: 1.4em;
+            }
+            .btn {
+                width: 320px;
+                font-size: 20px;
+                position: relative;
+                padding-block: 16px;
+                padding-inline: 30px;
+                background-color: #2787c6;
+                color: #fff;
+                transition: background-color 0.3s ease;
+                line-height: 18px;
+                box-shadow: 0 3px 0 #161d22;
+                display: inline-block;
+            }
+            .btn:hover {
+                background-color: #0ec8aa;
+            }
+            .result {
+                display: none;
+            }
+            .numbers {
+                margin-bottom: 2.8em;
+            }
+            .numbers span {
+                display: inline-block;
+                font-size: 40px;
+                font-weight: bold;
+                width: 80px;
+                height: 80px;
+                line-height: 80px;
+                margin-right: 8px;
+                vertical-align: middle;
+                border-radius: 50%;
+                text-align: center;
+            }
+            .numbers span:not(:first-child) {
+                box-shadow: 2px 2px 4px 2px rgba(2, 8, 20, 0.2);
+                color: #fff;
+            }
+            .yellow {
+                background-image: linear-gradient(to bottom, #ffe482, #ff9900);
+            }
+            .blue {
+                background-image: linear-gradient(to bottom, #3cd2ff, #0072ff);
+            }
+            .red {
+                background-image: linear-gradient(to bottom, #ff8383, #d40000);
+            }
+            .black {
+                background-image: linear-gradient(to bottom, #c9c9c9, #656565);
+            }
+            .green {
+                background-image: linear-gradient(to bottom, #7bd986, #05ba3d);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="menu">
+            <ul class="menu-title">
+                <li><a href="index.html">랜덤자리뽑기</a></li>
+                <li><a href="random_num.html">숫자랜덤뽑기</a></li>
+                <li><a href="random_lotto.html">로또번호생성기</a></li>
+                <li><a href="count.html">당첨횟수순</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <button id="startLotto" class="btn">로또 번호 추출</button><br>
+            <div style="margin-top: 1.2em;"></div><br>
+            <div id="randomNumberContainer" class="result">
+            <!----------------로또번호생성----------------->
+            </div>
+        </div>
+
+        <script>
+            //버튼클릭
+            const button = document.getElementById('startLotto');
+
+            button.addEventListener('mousedown', function() {
+                button.style.boxShadow = '0 0 0 #161d22';
+                button.style.top='3px';
+            });
+            button.addEventListener('mouseup', function() {
+                button.style.boxShadow = '0 3px 0 #161d22';
+                button.style.top='0px';
+            });
+
+
+            //랜덤 숫자 6개 생성 함수
+            function generateRandomNumbers() {
+            const min = 1;
+            const max = 45;
+            const numbers = [];
+
+            for (let i = min; i <= max; i++) {
+                numbers.push(i);
+            }
+
+            for (let i = numbers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+            }
+
+            return numbers.slice(0, 6); // 6개의 랜덤 숫자만 선택
+            }
+
+
+            const container = document.getElementById("randomNumberContainer");
+            const generateButton = document.getElementById("startLotto");
+
+
+            function createRandomNumbers() {
+            randomNumberContainer.style.display = "inline-block";
+            container.innerHTML = ''; // 이전에 생성된 내용 지우기
+                for (let i = 0; i < 5; i++) {
+                    const divElement = document.createElement("div");
+                    divElement.classList.add("numbers");
+                    container.appendChild(divElement);
+                    //div 5개 생성 class 지정
+
+                    const randomNumbers = generateRandomNumbers();
+                    randomNumbers.sort((a, b) => a - b);
+                    //오름차순 정렬
+
+                    const spanElement = document.createElement("span");
+                    spanElement.textContent = (i+1) + "번: ";
+                    divElement.appendChild(spanElement);
+
+
+                    for (let j = 0; j < 6; j++) {
+                        const spanElement = document.createElement("span");
+                        spanElement.textContent = randomNumbers[j];
+
+                        if (randomNumbers[j] <= 10) {
+                        spanElement.classList.add("yellow");
+                        } 
+                        else if (randomNumbers[j] <= 20) {
+                        spanElement.classList.add("blue");
+                        } 
+                        else if (randomNumbers[j] <= 30) {
+                        spanElement.classList.add("red");
+                        } 
+                        else if (randomNumbers[j] <= 40) {
+                        spanElement.classList.add("black");
+                        } 
+                        else {
+                        spanElement.classList.add("green");
+                        }
+
+                        divElement.appendChild(spanElement);
+                    }   //span 6개 생성 색 class 지정
+                }
+            }
+
+            generateButton.addEventListener("click", createRandomNumbers);
+            //createRandomNumbers(); //페이지가 로드될 때 createRandomNumbers 함수를 한 번 호출
+        </script>
+    </body>
+</html>
